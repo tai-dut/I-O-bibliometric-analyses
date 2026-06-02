@@ -1,0 +1,177 @@
+---
+title: "NetworkAnalysis_markdown"
+author: "Tai Usdin Du Toit"
+date: "2026-03-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(pacman)
+p_load(bibliometrix, webshot2, dplyr, htmlwidgets, ggplot2, reshape2, usethis, gitcreds)
+```
+
+## Loading in DATA
+
+```{r}
+file_path <- "C:/Users/taidu/OneDrive/Desktop/RM1 group project/bib_folder_for_evo"
+bib.files.list.evo <- list.files(path = file_path, pattern = "\\.bib", full.names = T)
+bib.df.list.evo <- list()
+years <- c(2021, 2022, 2023, 2024, 2025)
+
+```
+
+### combining data frames
+
+```{r}
+for (i in seq_along(bib.files.list.evo)) {
+  cat("Reading file:", bib.files.list.evo[i], "\n")
+  df <- convert2df(file = bib.files.list.evo[i],
+                   dbsource = "wos",
+                   format = "bibtex")
+  bib.df.list.evo[[i]] <- df
+}
+combined_df_evo <- bind_rows(bib.df.list.evo)
+```
+
+### Cleaning data
+
+```{r}
+# Ensure SR is a character vector (it usually is)
+combined_df_evo$SR <- make.unique(as.character(combined_df_evo$SR))
+
+# Verify no duplicates remain
+any(duplicated(combined_df_evo$SR))   # should be FALSE
+```
+## removing the 2020
+
+```{r}
+combined_df_evo <- combined_df_evo[combined_df_evo$PY != 2020, ]
+```
+
+
+## Thematic evolution
+
+```{r}
+sankey <- thematicEvolution(
+combined_df_evo,
+field = "DE",
+years,
+n = 150,
+minFreq = 2,
+size = 0.4,
+ngrams = 1,
+stemming = FALSE,
+n.labels = 5,
+repel = TRUE,
+remove.terms = c("I26", "management", "theory", "smes", "business", "industries", "costs", "o33", "(sic)(sic)(sic)(sic)", "l26", "126", "n", "review", "china", "india", "literature review", "systematic literature review", "pls-sem", "meta-analysis", "systematic review"),
+synonyms = NULL,
+cluster = "louvain",
+seed = 69,
+assign.evolution.colors = list(assign = TRUE, measure = "weighted")
+)
+
+```
+
+## Plots
+### Thematic evolution
+```{r}
+sankey.plot <- plotThematicEvolution(sankey$Nodes, sankey$Edges)
+sankey.plot
+```
+
+### Thematic map: 2021
+
+```{r}
+names(sankey)
+maps <- sankey$TM
+maps[[1]]
+```
+## 2022
+```{r}
+maps[[2]]
+```
+## 2023
+
+```{r}
+maps[[3]]
+```
+
+## 2024
+```{r}
+maps[[4]]
+```
+
+## 2025
+```{r}
+maps[[5]]
+```
+
+## 2026
+```{r}
+maps[[6]]
+```
+
+
+
+
+## Keyword Growth from 2021 to 2026
+
+```{r}
+topkw <- KeywordGrowth(combined_df_evo,
+                       Tag = "DE",
+                       sep = ";",
+                       top = 10,
+                       cdf = T,
+                       remove.terms = c("I26", "management", "theory", "smes", "business", "industries", "costs", "o33", "(sic)(sic)(sic)(sic)", "l26", "126", "n", "review", "china", "india", "literature review", "systematic literature review", "pls-sem", "meta-analysis", "systematic review"),
+                       synonyms = NULL)
+
+png("growth_graph", height = 5000, width = 8000, res = 1080)
+DF <- melt(topkw, id = "Year")
+g <- ggplot(DF, aes(Year, value, group = variable, color = variable)) + geom_line()
+dev.off()
+
+g
+```
+
+
+## Saving images
+
+```{r}
+library(plotly)
+# sankey
+html_file <- "C:/Users/taidu/OneDrive/Desktop/RM1 group project/Images/sankey.html"
+saveWidget(sankey.plot, file = html_file, selfcontained = TRUE)
+
+png_file<- "C:/Users/taidu/OneDrive/Desktop/RM1 group project/Images/sankey.png"
+
+webshot2::webshot(
+  url = html_file,
+  file = png_file,
+  vwidth = 900,   # width in pixels
+  vheight = 600,   # height in pixels
+  zoom = 2         # optional: increases resolution (2x = 2400x1600 pixels)
+)
+
+period_labels <- c("2021", "2022", "2023", "2024", "2025", "2026")
+
+for (i in 1:length(sankey$TM)) {
+  ggsave(
+    filename = file.path("C:/Users/taidu/OneDrive/Desktop/RM1 group project/Images",paste0(period_labels[i],".png")),
+    plot = sankey$TM[[i]]$map,  
+    width = 10,
+    height = 8,
+    dpi = 300
+  )
+}
+
+ggsave(
+  filename = file.path("C:/Users/taidu/OneDrive/Desktop/RM1 group project/Images", "Keyword_growth_evo.png"),
+  plot = g,
+  width = 10,
+  height = 8,
+  dpi = 300
+)
+```
+
+
