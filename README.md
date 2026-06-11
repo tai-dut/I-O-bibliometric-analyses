@@ -1,5 +1,5 @@
 # I-O-bibliometric-analyses
-Bibliometric analyses of Keyword Web of Science publication data from 2021 to 2026. Contains a co-occurrence network analysis, Thematic analysis, and keyword growth graph. Results indicated AI and sustainability were consistent strong themes and growing
+Bibliometric analyses of Keyword Web of Science publication data from 2021 to 2026. Contains a co-occurrence network analysis, Thematic analysis, and keyword growth graph. Results indicated AI and sustainability were consistent strong themes and growing.
 Note. Project is finished and analysis is written but not included here.
 ## Network Analysis
 Initial analyses were a network analysis on the 39000 data points from 2025 to 2026
