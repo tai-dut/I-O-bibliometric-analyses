@@ -4,7 +4,7 @@ Note. Project is finished and analysis is written but not included here.
 ## Network Analysis
 Initial analyses were a network analysis on the 39000 data points from 2025 to 2026
 
-<img width="939" height="411" alt="image" src="https://github.com/user-attachments/assets/e4506c7e-96ac-4ca3-9ce8-473d37fb4243" />
+<img width="8000" height="5000" alt="test_plot7" src="https://github.com/user-attachments/assets/cad8c759-8e0e-4e66-80ae-76415a0f054c" />
 
 ## Thematic Evolution
 Secondary analyses consisted of a Thematic evolution using the top 1000 cited articles from 2021 to 2026. Thematic maps for each year are included.
