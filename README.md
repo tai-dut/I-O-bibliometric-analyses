@@ -34,7 +34,7 @@ Final analysis was a keyword growth graph
 
 <img width="3000" height="2400" alt="Keyword_growth_evo" src="https://github.com/user-attachments/assets/0c611348-b05a-4a96-8651-55b13c3eca70" />
 
-Project completed by Tai Usdin-Du Toit and Tristan Bell, 
+Co-occurrence Analyses were completed by Tai Usdin-Du Toit and Tristan Bell, 
 
 in conjunction with epistemic justice and AI knowledge from Bryony Clark, Jahaan Jamodien, and Jocelyn Rouillon.
 
